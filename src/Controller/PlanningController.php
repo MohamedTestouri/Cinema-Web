@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -28,7 +29,7 @@ class PlanningController extends AbstractController
     public function showPlanning()
     {
         $listPlanning = $this->getDoctrine()->getRepository(Planning::class)->findAll();
-        $serializer = new Serializer([new ObjectNormalizer()]);
+        $serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()]);
         $formatted = $serializer->normalize($listPlanning);
         return new JsonResponse($formatted);
     }

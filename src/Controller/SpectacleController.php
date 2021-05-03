@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -24,7 +25,7 @@ class SpectacleController extends AbstractController
     public function showSpectacle()
     {
         $listSpectacles = $this->getDoctrine()->getRepository(Spectacle::class)->findAll();
-        $serializer = new Serializer([new ObjectNormalizer()]);
+        $serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()]);
         $formatted = $serializer->normalize($listSpectacles);
         return new JsonResponse($formatted);
     }
