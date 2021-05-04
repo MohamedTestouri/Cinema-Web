@@ -105,6 +105,16 @@ class PlanningController extends AbstractController
         $formatted = $serializer->normalize($listPlanning);
         return new JsonResponse($formatted);
     }
+    /**
+     * @Route("film/api/get", name="api_film_get")
+     */
+    public function getfilm()
+    {
+        $listPlanning = $this->getDoctrine()->getRepository(Film::class)->findAll();
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($listPlanning);
+        return new JsonResponse($formatted);
+    }
 
     /**
      * @Route("/planningsUser-Calendar", name="afficher_plannings_User_Calendar")
