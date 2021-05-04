@@ -28,6 +28,15 @@ class SpectacleController extends AbstractController
         $serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()]);
         $formatted = $serializer->normalize($listSpectacles);
         return new JsonResponse($formatted);
+    }/**
+     * @Route("spectacle/api/showOrdered", name="api_spectacle_showOrdered")
+     */
+    public function showOrderedSpectacle()
+    {
+        $listSpectacles = $this->getDoctrine()->getRepository(Spectacle::class)->orderByDate();
+        $serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($listSpectacles);
+        return new JsonResponse($formatted);
     }
     /**
      * @Route("spectacle/api/add", name="api_spectacle_add")
@@ -36,7 +45,11 @@ class SpectacleController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $spectacle = new Spectacle();
         $spectacle->setTitre($request->get('titre'));
-        $spectacle->setDate($request->get('date'));
+        try {
+            $spectacle->setDate(new \DateTime($request->get('date')));
+        } catch (\Exception $e) {
+
+        }
         $spectacle->setGenre($request->get('genre'));
         $spectacle->setImagePath($request->get('img'));
         $em->persist($spectacle);
@@ -53,7 +66,11 @@ class SpectacleController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $spectacle = $em->getRepository(Spectacle::class)->find($request->get('id'));
         $spectacle->setTitre($request->get('titre'));
-        $spectacle->setDate($request->get('date'));
+        try {
+            $spectacle->setDate(new \DateTime($request->get('date')));
+        } catch (\Exception $e) {
+//$spectacle->setDate(new \DateTime());
+        }
         $spectacle->setGenre($request->get('genre'));
         $spectacle->setImagePath($request->get('img'));
         $em->flush();

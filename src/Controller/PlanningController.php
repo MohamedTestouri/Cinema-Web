@@ -33,6 +33,16 @@ class PlanningController extends AbstractController
         $formatted = $serializer->normalize($listPlanning);
         return new JsonResponse($formatted);
     }
+ /**
+     * @Route("planning/api/showOrdered", name="api_planning_showOrdered")
+     */
+    public function showOrderedPlanning()
+    {
+        $listPlanning = $this->getDoctrine()->getRepository(Planning::class)->orderByType();
+        $serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($listPlanning);
+        return new JsonResponse($formatted);
+    }
 
     /**
      * @Route("planning/api/add", name="api_planning_add")
@@ -44,7 +54,11 @@ class PlanningController extends AbstractController
         $planning->setTitreEvent($request->get('titre'));
         $planning->setTypeEvent($request->get('type'));
         $planning->setNomSalle($request->get('salle'));
-        $planning->setDate($request->get('date'));
+        try {
+            $planning->setDate(new \DateTime($request->get('date')));
+        } catch (\Exception $e) {
+
+        }
         $planning->setHeureDebut($request->get('heureDebut'));
         $planning->setHeureFin($request->get('heureFin'));
         $em->persist($planning);
@@ -64,7 +78,11 @@ class PlanningController extends AbstractController
         $planning->setTitreEvent($request->get('titre'));
         $planning->setTypeEvent($request->get('type'));
         $planning->setNomSalle($request->get('salle'));
-        $planning->setDate($request->get('date'));
+        try {
+            $planning->setDate(new \DateTime($request->get('date')));
+        } catch (\Exception $e) {
+
+        }
         $planning->setHeureDebut($request->get('heureDebut'));
         $planning->setHeureFin($request->get('heureFin'));
         $em->flush();
