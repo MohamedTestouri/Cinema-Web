@@ -69,7 +69,7 @@ class SpectacleController extends AbstractController
         try {
             $spectacle->setDate(new \DateTime($request->get('date')));
         } catch (\Exception $e) {
-//$spectacle->setDate(new \DateTime());
+            $spectacle->setDate(new \DateTime());
         }
         $spectacle->setGenre($request->get('genre'));
         $spectacle->setImagePath($request->get('img'));

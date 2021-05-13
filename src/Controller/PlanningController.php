@@ -33,6 +33,16 @@ class PlanningController extends AbstractController
         $formatted = $serializer->normalize($listPlanning);
         return new JsonResponse($formatted);
     }
+    /**
+     * @Route("planning/api/get", name="api_planning_get")
+     */
+    public function showPlanningBySpectacleTitle(Request $request)
+    {
+        $listPlanning = $this->getDoctrine()->getRepository(Planning::class)->getByTitle($request->get('titre'));
+        $serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($listPlanning);
+        return new JsonResponse($formatted);
+    }
  /**
      * @Route("planning/api/showOrdered", name="api_planning_showOrdered")
      */
